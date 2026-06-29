@@ -27,7 +27,7 @@ const elTop    = document.getElementById('topViewerCount');
 
 function renderCounts() {
     if (elBottom) elBottom.textContent = viewerCount;
-    if (elTop)    elTop.textContent    = viewerCount + VIEWER_OFFSET;
+    if (elTop)    elTop.textContent    = viewerCount;
 }
 
 function updateViewerCount() {
