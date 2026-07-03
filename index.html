@@ -75,66 +75,6 @@
         <span>ESTE VIDEO SALDRÁ DEL AIRE EL <span class="date">22/07/2026</span></span>
     </div>
 
-    <!-- ════ AUDIO PLAYER ════ -->
-    <section class="audio-section" aria-label="Oración en audio">
-
-        <div class="audio-card">
-
-            <div class="audio-deco" aria-hidden="true">
-                <!-- dove / peace symbol -->
-                <svg width="38" height="38" viewBox="0 0 64 64" fill="none">
-                    <path d="M32 8C20 8 10 18 10 30c0 8 4.5 15 11 19l-3 7h28l-3-7c6.5-4 11-11 11-19 0-12-10-22-22-22z" fill="url(#goldGrad)" opacity="0.25"/>
-                    <path d="M44 14c-4-4-10-5-15-2L18 22l6 2-8 8 10-2-4 8 12-6-2 8 8-10 2 6 6-12-4-2 4-8-8 4 2-6-2 2z" fill="url(#goldGrad)"/>
-                    <defs>
-                        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
-                            <stop offset="0%" stop-color="#f5c842"/>
-                            <stop offset="100%" stop-color="#c8973a"/>
-                        </linearGradient>
-                    </defs>
-                </svg>
-            </div>
-
-            <p class="audio-label">🎧 Material Complementario — Oración Guiada</p>
-
-            <p class="audio-instruction">
-                Las palabras que estás a punto de escuchar deben ser pronunciadas
-                en voz alta por ti. Encuéntralas escritas en el material complementario.
-                <strong>Repite las veces que sean necesarias</strong> hasta poder decirlas
-                completas, con confianza y sin errores —
-                solo entonces comenzarán a manifestar su verdadero poder en tu vida.
-            </p>
-
-            <!-- Custom player -->
-            <div class="audio-player-wrap">
-                <audio id="oracaoAudio" preload="metadata">
-                    <source src="assets/audio/oracao.mp3" type="audio/mpeg">
-                </audio>
-
-                <button class="play-btn" id="playBtn" aria-label="Reproducir">
-                    <svg id="iconPlay" width="22" height="22" viewBox="0 0 24 24" fill="white">
-                        <polygon points="6,4 20,12 6,20"/>
-                    </svg>
-                    <svg id="iconPause" width="22" height="22" viewBox="0 0 24 24" fill="white" style="display:none">
-                        <rect x="5" y="4" width="4" height="16" rx="1"/>
-                        <rect x="15" y="4" width="4" height="16" rx="1"/>
-                    </svg>
-                </button>
-
-                <div class="player-right">
-                    <div class="progress-bar" id="progressBar" role="slider" aria-label="Progreso" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <div class="time-row">
-                        <span id="currentTime">0:00</span>
-                        <span id="totalTime">0:00</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-    </section>
-
     <!-- ════ COMMENTS ════ -->
     <section class="comments-section" aria-label="Comentarios">
 
