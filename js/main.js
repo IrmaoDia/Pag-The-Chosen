@@ -40,6 +40,62 @@ renderCounts();                           // set both on first paint
 setInterval(updateViewerCount, VIEWER_TICK);
 
 /* ════════════════════════════════
+   AUDIO PLAYER
+════════════════════════════════ */
+const audio       = document.getElementById('oracaoAudio');
+const playBtn     = document.getElementById('playBtn');
+const iconPlay    = document.getElementById('iconPlay');
+const iconPause   = document.getElementById('iconPause');
+const progressBar = document.getElementById('progressBar');
+const progressFill= document.getElementById('progressFill');
+const currentTime = document.getElementById('currentTime');
+const totalTime   = document.getElementById('totalTime');
+
+function fmt(s) {
+    const m = Math.floor(s / 60);
+    const sec = Math.floor(s % 60);
+    return `${m}:${sec.toString().padStart(2,'0')}`;
+}
+
+if (audio && playBtn) {
+    playBtn.addEventListener('click', () => {
+        if (audio.paused) {
+            audio.play();
+            iconPlay.style.display  = 'none';
+            iconPause.style.display = 'block';
+        } else {
+            audio.pause();
+            iconPlay.style.display  = 'block';
+            iconPause.style.display = 'none';
+        }
+    });
+
+    audio.addEventListener('timeupdate', () => {
+        if (!audio.duration) return;
+        const pct = (audio.currentTime / audio.duration) * 100;
+        progressFill.style.width = pct + '%';
+        progressBar.setAttribute('aria-valuenow', Math.round(pct));
+        currentTime.textContent  = fmt(audio.currentTime);
+    });
+
+    audio.addEventListener('loadedmetadata', () => {
+        totalTime.textContent = fmt(audio.duration);
+    });
+
+    audio.addEventListener('ended', () => {
+        iconPlay.style.display  = 'block';
+        iconPause.style.display = 'none';
+        progressFill.style.width = '0%';
+    });
+
+    progressBar.addEventListener('click', (e) => {
+        const rect = progressBar.getBoundingClientRect();
+        const pct  = (e.clientX - rect.left) / rect.width;
+        audio.currentTime = pct * audio.duration;
+    });
+}
+
+/* ════════════════════════════════
    DYNAMIC EXPIRY DATE
    Always shows tomorrow's date in DD/MM/YYYY format
 ════════════════════════════════ */
