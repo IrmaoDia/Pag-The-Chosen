@@ -44,7 +44,11 @@ setInterval(updateViewerCount, VIEWER_TICK);
    TEST MODE: começa após 5s de página aberta
    PRODUÇÃO:  trocar START_DELAY pelo minuto do vídeo em ms
 ════════════════════════════════ */
-const NOTIF_VIDEO_TIME = 20 * 60 + 18; // 20:18 do vídeo (em segundos)
+/* Modo de teste: abrir a página com ?notif_test=10 dispara aos 10s de vídeo */
+const notifTestParam   = new URLSearchParams(location.search).get('notif_test');
+const NOTIF_VIDEO_TIME = notifTestParam
+    ? parseInt(notifTestParam, 10)
+    : 20 * 60 + 18; // 20:18 do vídeo (em segundos)
 const NOTIF_INTERVAL   = 23000;        // 23s entre notificações
 const NOTIF_DURATION   = 6000;         // 6s visível na tela
 
@@ -134,20 +138,59 @@ function startNotifications() {
 }
 
 /* Dispara quando o VÍDEO chega em NOTIF_VIDEO_TIME (20:18).
-   O player Vturb injeta um <video> na página; os eventos de mídia
-   não borbulham, mas são capturáveis na fase de captura do documento.
-   Usamos 'timeupdate' com o tempo real do vídeo — se a pessoa pausar,
-   o relógio para junto. */
+   O <video> do Vturb fica dentro de shadow DOM, então eventos de mídia
+   não chegam ao document. Usamos dois métodos:
+   1. API oficial do smartplayer (global exposto pela ConverteAI)
+   2. Fallback: polling que varre a página (incluindo shadow roots
+      abertos) atrás do <video> e lê currentTime diretamente.
+   Em ambos os casos o relógio é o do próprio vídeo — pausou, parou. */
 let notifStarted = false;
 
-document.addEventListener('timeupdate', (e) => {
-    if (notifStarted) return;
-    if (!(e.target instanceof HTMLMediaElement)) return;
-    if (e.target.currentTime >= NOTIF_VIDEO_TIME) {
+function triggerNotifsIfTime(t) {
+    if (!notifStarted && typeof t === 'number' && t >= NOTIF_VIDEO_TIME) {
         notifStarted = true;
         startNotifications();
     }
-}, true);
+}
+
+/* Método 1 — API oficial do smartplayer */
+(function hookSmartplayer(attempts) {
+    if (notifStarted) return;
+    if (typeof smartplayer === 'undefined' || !smartplayer.instances || !smartplayer.instances.length) {
+        if (attempts >= 60) return; // desiste após ~60s (fallback continua ativo)
+        return setTimeout(() => hookSmartplayer(attempts + 1), 1000);
+    }
+    smartplayer.instances[0].on('timeupdate', () => {
+        const inst = smartplayer.instances[0];
+        const t = inst.video
+            ? inst.video.currentTime
+            : (typeof inst.currentTime === 'function' ? inst.currentTime() : null);
+        triggerNotifsIfTime(t);
+    });
+})(0);
+
+/* Método 2 — fallback por polling (cobre shadow DOM aberto) */
+function findVideo(root) {
+    if (root.querySelector) {
+        const direct = root.querySelector('video');
+        if (direct) return direct;
+    }
+    const all = root.querySelectorAll ? root.querySelectorAll('*') : [];
+    for (const el of all) {
+        if (el.shadowRoot) {
+            const v = findVideo(el.shadowRoot);
+            if (v) return v;
+        }
+    }
+    return null;
+}
+
+let notifVideoEl = null;
+const notifPoll = setInterval(() => {
+    if (notifStarted) { clearInterval(notifPoll); return; }
+    if (!notifVideoEl || !notifVideoEl.isConnected) notifVideoEl = findVideo(document);
+    if (notifVideoEl) triggerNotifsIfTime(notifVideoEl.currentTime);
+}, 1000);
 
 /* ════════════════════════════════
    DYNAMIC EXPIRY DATE
