@@ -397,6 +397,159 @@ body {
 }
 
 /* ════════════════════════════════
+   SOCIAL PROOF NOTIFICATIONS
+════════════════════════════════ */
+.notif-container {
+    position: fixed;
+    bottom: 24px;
+    left: 16px;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 10px;
+    pointer-events: none;
+    max-width: 290px;
+    width: calc(100vw - 32px);
+}
+
+.notif {
+    background: rgba(250, 250, 252, 0.88);
+    -webkit-backdrop-filter: blur(24px) saturate(1.6);
+    backdrop-filter: blur(24px) saturate(1.6);
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.16), 0 1px 2px rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    pointer-events: all;
+    transform: translateX(-116%) scale(0.97);
+    opacity: 0;
+    transition: transform 0.5s cubic-bezier(0.32, 0.72, 0, 1), opacity 0.35s ease;
+}
+
+.notif.notif--show {
+    transform: translateX(0) scale(1);
+    opacity: 1;
+}
+
+.notif.notif--hide {
+    transform: translateX(-116%) scale(0.97);
+    opacity: 0;
+    transition: transform 0.4s cubic-bezier(0.5, 0, 0.75, 0), opacity 0.3s ease-in;
+}
+
+.notif-inner {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 11px 12px 10px;
+    position: relative;
+}
+
+/* App-style rounded-square icon */
+.notif-icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 8.5px;
+    background: linear-gradient(160deg, #34c759 0%, #2aa14c 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 17px;
+    flex-shrink: 0;
+    line-height: 1;
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.06);
+}
+
+.notif-text {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    flex: 1;
+    min-width: 0;
+    padding-right: 34px;
+}
+
+.notif-name {
+    font-size: 13px;
+    font-weight: 600;
+    color: #1c1c1e;
+    letter-spacing: -0.08px;
+}
+
+.notif-action {
+    font-size: 13px;
+    font-weight: 400;
+    color: #3a3a3c;
+    line-height: 1.32;
+    letter-spacing: -0.08px;
+}
+
+.notif-time {
+    position: absolute;
+    top: 10px;
+    right: 30px;
+    font-size: 11px;
+    color: rgba(60, 60, 67, 0.55);
+    letter-spacing: -0.05px;
+}
+
+.notif-close {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    width: 18px;
+    height: 18px;
+    background: rgba(120, 120, 128, 0.16);
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 9px;
+    color: rgba(60, 60, 67, 0.7);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: background 0.15s;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.notif-close:hover {
+    background: rgba(120, 120, 128, 0.28);
+}
+
+/* Progress bar that drains */
+.notif-bar {
+    height: 2px;
+    background: rgba(120, 120, 128, 0.12);
+}
+
+.notif-bar-fill {
+    height: 100%;
+    width: 100%;
+    background: rgba(60, 60, 67, 0.30);
+    transform-origin: left;
+    transition: none;
+}
+
+.notif-bar-fill.notif-bar--drain {
+    transition: width linear;
+    width: 0%;
+}
+
+@media (prefers-color-scheme: dark) {
+    .notif {
+        background: rgba(44, 44, 46, 0.86);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+    }
+    .notif-name   { color: #f2f2f7; }
+    .notif-action { color: #d1d1d6; }
+    .notif-time   { color: rgba(235, 235, 245, 0.5); }
+    .notif-close  { background: rgba(120, 120, 128, 0.32); color: rgba(235, 235, 245, 0.7); }
+    .notif-bar    { background: rgba(120, 120, 128, 0.2); }
+    .notif-bar-fill { background: rgba(235, 235, 245, 0.35); }
+}
+
+/* ════════════════════════════════
    RESPONSIVE
 ════════════════════════════════ */
 @media (max-width: 360px) {
