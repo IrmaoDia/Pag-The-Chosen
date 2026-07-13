@@ -135,6 +135,9 @@ function startNotifications() {
 
     showNotif(); // primeira imediata ao iniciar
     setInterval(showNotif, NOTIF_INTERVAL);
+
+    // comentário da Carmen surge logo depois da primeira notificação
+    setTimeout(() => spawnComment(CARMEN_COMMENT), CARMEN_AFTER_NOTIF_DELAY);
 }
 
 /* Dispara quando o VÍDEO chega em NOTIF_VIDEO_TIME (20:18).
@@ -191,6 +194,66 @@ const notifPoll = setInterval(() => {
     if (!notifVideoEl || !notifVideoEl.isConnected) notifVideoEl = findVideo(document);
     if (notifVideoEl) triggerNotifsIfTime(notifVideoEl.currentTime);
 }, 1000);
+
+/* ════════════════════════════════
+   COMENTÁRIO DINÂMICO — Carmen Rodríguez
+   Surge no topo dos comentários logo depois da PRIMEIRA
+   notificação de compra aparecer (disparado em startNotifications).
+════════════════════════════════ */
+const CARMEN_AFTER_NOTIF_DELAY = 2000; // 2s após a primeira notificação
+
+const CARMEN_COMMENT = {
+    name:   'Carmen Rodríguez',
+    img:    'assets/img/carmen-rodriguez.webp',
+    letter: 'C',
+    color:  'avatar--purple',
+    likes:  3,
+    time:   '1 min',
+    text:   'Nadie está cobrando por la fe ni por la oración. Estamos pagando ' +
+            'por recibir todo preparado, explicado y disponible en un solo ' +
+            'lugar. Lo pagué con gusto.',
+};
+
+function spawnComment(c) {
+    const section      = document.querySelector('.comments-section');
+    const firstComment = section ? section.querySelector('.comment') : null;
+    if (!firstComment) return;
+
+    const el = document.createElement('article');
+    el.className = 'comment comment--incoming';
+    el.innerHTML = `
+        <div class="avatar ${c.color}" aria-hidden="true">
+            <img class="avatar-img" src="${c.img}" alt="${c.name}" onerror="this.remove()">
+            <span class="avatar-letter">${c.letter}</span>
+        </div>
+        <div class="comment-body">
+            <div class="comment-bubble">
+                <div class="comment-name">${c.name}</div>
+                <div class="comment-text">${c.text}</div>
+            </div>
+            <div class="comment-actions">
+                <span class="action-btn">Me gusta</span>
+                <span class="dot-sep">·</span>
+                <span class="action-btn">Responder</span>
+                <span class="dot-sep">·</span>
+                <span class="reaction-wrap">
+                    <span class="reaction-icons"><span class="react-like"></span></span>
+                    <span class="reaction-count">${c.likes}</span>
+                </span>
+                <span class="dot-sep">·</span>
+                <span>${c.time}</span>
+            </div>
+        </div>
+    `;
+
+    firstComment.parentNode.insertBefore(el, firstComment);
+
+    // dois frames para a transição de entrada disparar
+    requestAnimationFrame(() => {
+        requestAnimationFrame(() => el.classList.add('comment--in'));
+    });
+}
+
 
 /* ════════════════════════════════
    DYNAMIC EXPIRY DATE

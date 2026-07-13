@@ -396,6 +396,27 @@ body {
     margin: 12px 0;
 }
 
+/* ── Comentário dinâmico (surge durante as notificações) ── */
+.comment--incoming {
+    opacity: 0;
+    transform: translateY(-12px);
+    transition: opacity 0.55s ease, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.comment--incoming.comment--in {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+@keyframes bubble-highlight {
+    0%   { background: #e3eefc; }
+    100% { background: var(--bubble-bg); }
+}
+
+.comment--incoming.comment--in .comment-bubble {
+    animation: bubble-highlight 2.2s ease 0.4s backwards;
+}
+
 /* ════════════════════════════════
    SOCIAL PROOF NOTIFICATIONS
 ════════════════════════════════ */
