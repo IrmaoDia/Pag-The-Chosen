@@ -211,6 +211,23 @@ body {
     margin-left: 44px;
 }
 
+/* Comentário programado: oculto até o vídeo chegar na hora certa (js/main.js).
+   Precisa de display:none explícito — o atributo [hidden] perderia para
+   .comment { display: flex } por ordem de cascata. */
+.comment--timed {
+    display: none;
+}
+
+.comment--timed.comment--shown {
+    display: flex;
+    animation: comment-in 0.45s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+
+@keyframes comment-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to   { opacity: 1; transform: none; }
+}
+
 /* ── Avatar ── */
 .avatar {
     width: 38px;

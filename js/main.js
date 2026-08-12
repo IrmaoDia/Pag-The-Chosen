@@ -214,6 +214,30 @@ function startNotifications() {
     notifSent = 1;
 }
 
+/* ════════════════════════════════
+   COMENTÁRIO PROGRAMADO
+   O <article id="commentLaura"> já está no index.html, oculto por
+   .comment--timed. Aos 20:24 do vídeo ele é revelado no topo da lista,
+   acima do comentário da María García.
+════════════════════════════════ */
+const COMMENT_VIDEO_TIME = notifTestParam
+    ? NOTIF_VIDEO_TIME + 6     // no modo de teste mantém o mesmo intervalo (20:18 → 20:24)
+    : 20 * 60 + 24;            // 20:24 do vídeo (em segundos)
+
+let commentShown = false;
+
+function revealCommentIfTime(t) {
+    if (commentShown || typeof t !== 'number' || t < COMMENT_VIDEO_TIME) return;
+    commentShown = true;
+
+    const el = document.getElementById('commentLaura');
+    if (el) el.classList.add('comment--shown');
+
+    // "Mostrando 11 de 1.247" → 12, para bater com o que está na tela
+    const header = document.querySelector('.comments-header');
+    if (header) header.textContent = header.textContent.replace(/\d+/, n => Number(n) + 1);
+}
+
 /* Dispara quando o VÍDEO chega em NOTIF_VIDEO_TIME (20:18).
    O <video> do Vturb fica dentro de shadow DOM, então eventos de mídia
    não chegam ao document. Usamos dois métodos:
@@ -252,6 +276,17 @@ function notifClockTick(t, duration) {
     }
 }
 
+/* Tudo que é agendado pelo relógio do vídeo passa por aqui */
+function videoClockTick(t, duration) {
+    notifClockTick(t, duration);
+    revealCommentIfTime(t);
+}
+
+/* Já terminou tudo? (usado para desligar o polling) */
+function videoClockDone() {
+    return notifStarted && notifSent >= notifTotal && commentShown;
+}
+
 /* Método 1 — API oficial do smartplayer */
 (function hookSmartplayer(attempts) {
     if (typeof smartplayer === 'undefined' || !smartplayer.instances || !smartplayer.instances.length) {
@@ -266,7 +301,7 @@ function notifClockTick(t, duration) {
         const d = inst.video
             ? inst.video.duration
             : (typeof inst.duration === 'function' ? inst.duration() : undefined);
-        notifClockTick(t, d);
+        videoClockTick(t, d);
     });
 })(0);
 
@@ -288,9 +323,9 @@ function findVideo(root) {
 
 let notifVideoEl = null;
 const notifPoll = setInterval(() => {
-    if (notifStarted && notifSent >= notifTotal) { clearInterval(notifPoll); return; }
+    if (videoClockDone()) { clearInterval(notifPoll); return; }
     if (!notifVideoEl || !notifVideoEl.isConnected) notifVideoEl = findVideo(document);
-    if (notifVideoEl) notifClockTick(notifVideoEl.currentTime, notifVideoEl.duration);
+    if (notifVideoEl) videoClockTick(notifVideoEl.currentTime, notifVideoEl.duration);
 }, 500);
 
 /* ════════════════════════════════
