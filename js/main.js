@@ -215,27 +215,40 @@ function startNotifications() {
 }
 
 /* ════════════════════════════════
-   COMENTÁRIO PROGRAMADO
-   O <article id="commentLaura"> já está no index.html, oculto por
-   .comment--timed. Aos 20:24 do vídeo ele é revelado no topo da lista,
-   acima do comentário da María García.
+   COMENTÁRIOS PROGRAMADOS
+   Os <article> já estão no index.html, ocultos por .comment--timed.
+   Cada um é revelado quando o vídeo chega no seu horário.
+   MANTER EM ORDEM CRONOLÓGICA — a fila é consumida de cima para baixo.
+     at   = segundo do vídeo em produção
+     test = segundos após o gatilho das notificações, no modo ?notif_test
 ════════════════════════════════ */
-const COMMENT_VIDEO_TIME = notifTestParam
-    ? NOTIF_VIDEO_TIME + 6     // no modo de teste mantém o mesmo intervalo (20:18 → 20:24)
-    : 20 * 60 + 24;            // 20:24 do vídeo (em segundos)
+const TIMED_COMMENTS = [
+    { id: 'commentLaura', at: 20 * 60 + 24, test: 6  },  // 20:24 — Laura Mendoza
+    { id: 'commentSofia', at: 20 * 60 + 30, test: 12 },  // 20:30 — Sofía Herrera (resposta)
+];
 
-let commentShown = false;
+let commentIdx = 0;   // próximo da fila
 
-function revealCommentIfTime(t) {
-    if (commentShown || typeof t !== 'number' || t < COMMENT_VIDEO_TIME) return;
-    commentShown = true;
+function commentTimeOf(c) {
+    return notifTestParam ? NOTIF_VIDEO_TIME + c.test : c.at;
+}
 
-    const el = document.getElementById('commentLaura');
-    if (el) el.classList.add('comment--shown');
+function revealCommentsIfTime(t) {
+    if (typeof t !== 'number' || isNaN(t)) return;
 
-    // "Mostrando 11 de 1.247" → 12, para bater com o que está na tela
-    const header = document.querySelector('.comments-header');
-    if (header) header.textContent = header.textContent.replace(/\d+/, n => Number(n) + 1);
+    while (commentIdx < TIMED_COMMENTS.length) {
+        const c = TIMED_COMMENTS[commentIdx];
+        if (t < commentTimeOf(c)) return;           // ainda não é hora
+
+        const el = document.getElementById(c.id);
+        if (el) el.classList.add('comment--shown');
+
+        // "Mostrando 11 de 1.247" → +1, para bater com o que está na tela
+        const header = document.querySelector('.comments-header');
+        if (header) header.textContent = header.textContent.replace(/\d+/, n => Number(n) + 1);
+
+        commentIdx++;
+    }
 }
 
 /* Dispara quando o VÍDEO chega em NOTIF_VIDEO_TIME (20:18).
@@ -279,12 +292,12 @@ function notifClockTick(t, duration) {
 /* Tudo que é agendado pelo relógio do vídeo passa por aqui */
 function videoClockTick(t, duration) {
     notifClockTick(t, duration);
-    revealCommentIfTime(t);
+    revealCommentsIfTime(t);
 }
 
 /* Já terminou tudo? (usado para desligar o polling) */
 function videoClockDone() {
-    return notifStarted && notifSent >= notifTotal && commentShown;
+    return notifStarted && notifSent >= notifTotal && commentIdx >= TIMED_COMMENTS.length;
 }
 
 /* Método 1 — API oficial do smartplayer */
