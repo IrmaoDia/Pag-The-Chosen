@@ -94,20 +94,6 @@ body {
     line-height: 1.5;
 }
 
-.exclusive-banner .tag-line {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 6px;
-    margin-bottom: 3px;
-    font-size: 12px;
-    font-weight: 400;
-}
-
-.radio-icon {
-    display: inline-flex;
-}
-
 .exclusive-banner .sub-title {
     font-size: 16px;
     font-weight: 700;
