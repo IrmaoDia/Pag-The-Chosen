@@ -1,0 +1,386 @@
+/* ══════════════════════════════════════════════════════
+   Página de vendas — versão compatível com políticas de anúncios.
+   Sem vídeo, sem promessas de resultado, sem citar pessoas públicas.
+   ══════════════════════════════════════════════════════ */
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --bg:        #faf8f5;
+    --surface:   #ffffff;
+    --ink:       #232019;
+    --ink-soft:  #5c554a;
+    --ink-faint: #8a8175;
+    --line:      #e6e0d6;
+    --accent:    #8a6d3b;
+    --accent-bg: #f4ede0;
+    --max:       680px;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+}
+
+.wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+h1, h2, h3 {
+    font-family: Georgia, 'Times New Roman', serif;
+    font-weight: 700;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+}
+
+section { padding: 44px 0; }
+
+section + section { border-top: 1px solid var(--line); }
+
+/* ── TOPO ── */
+.topbar {
+    background: var(--surface);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 0;
+}
+
+.topbar .wrap {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.mark {
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+    background: var(--accent-bg);
+    border: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.mark svg { width: 17px; height: 17px; color: var(--accent); }
+
+.brand {
+    font-family: Georgia, serif;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+/* ── HERO ── */
+.hero { padding: 40px 0 44px; }
+
+.eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--accent);
+    background: var(--accent-bg);
+    padding: 5px 11px;
+    border-radius: 100px;
+    margin-bottom: 16px;
+}
+
+.hero h1 {
+    font-size: 30px;
+    margin-bottom: 14px;
+}
+
+.lede {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin-bottom: 26px;
+}
+
+/* ── Capa do livro (SVG inline) ── */
+.cover {
+    display: block;
+    width: 210px;
+    height: auto;
+    margin: 0 auto 28px;
+    filter: drop-shadow(0 14px 28px rgba(60, 48, 30, 0.18));
+}
+
+/* ── BOTÃO ── */
+.cta {
+    display: block;
+    width: 100%;
+    background: var(--accent);
+    color: #fff;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 700;
+    padding: 15px 22px;
+    border-radius: 8px;
+    transition: background 0.15s;
+}
+
+.cta:hover { background: #6f5730; }
+
+.cta-note {
+    text-align: center;
+    font-size: 13px;
+    color: var(--ink-faint);
+    margin-top: 10px;
+}
+
+/* ── TIPOGRAFIA DE SEÇÃO ── */
+section h2 {
+    font-size: 22px;
+    margin-bottom: 8px;
+}
+
+.sub {
+    color: var(--ink-soft);
+    margin-bottom: 22px;
+}
+
+section p + p { margin-top: 14px; }
+
+section p { color: var(--ink-soft); }
+
+/* ── LISTAS ── */
+.items {
+    list-style: none;
+    display: grid;
+    gap: 14px;
+}
+
+.items li {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.items svg {
+    width: 19px;
+    height: 19px;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 2px;
+}
+
+.items strong {
+    display: block;
+    color: var(--ink);
+    font-weight: 600;
+}
+
+.items span { color: var(--ink-soft); font-size: 15px; }
+
+/* ── CARTÕES DE CAPÍTULO ── */
+.chapters {
+    list-style: none;
+    display: grid;
+    gap: 10px;
+    counter-reset: ch;
+}
+
+.chapters li {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    padding: 14px 16px 14px 52px;
+    position: relative;
+    counter-increment: ch;
+}
+
+.chapters li::before {
+    content: counter(ch, decimal-leading-zero);
+    position: absolute;
+    left: 16px;
+    top: 14px;
+    font-family: Georgia, serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    opacity: 0.65;
+}
+
+.chapters b {
+    display: block;
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+.chapters span { font-size: 14px; color: var(--ink-soft); }
+
+/* ── PREÇO ── */
+.offer {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 28px 22px;
+    text-align: center;
+}
+
+.offer h2 { margin-bottom: 6px; }
+
+.price {
+    font-family: Georgia, serif;
+    font-size: 42px;
+    font-weight: 700;
+    line-height: 1;
+    margin: 18px 0 4px;
+}
+
+.price-note {
+    font-size: 14px;
+    color: var(--ink-faint);
+    margin-bottom: 22px;
+}
+
+.includes {
+    list-style: none;
+    text-align: left;
+    display: grid;
+    gap: 9px;
+    margin: 0 auto 24px;
+    max-width: 360px;
+    font-size: 15px;
+    color: var(--ink-soft);
+}
+
+.includes li {
+    display: flex;
+    gap: 9px;
+    align-items: flex-start;
+}
+
+.includes svg {
+    width: 17px;
+    height: 17px;
+    color: var(--accent);
+    flex-shrink: 0;
+    margin-top: 3px;
+}
+
+/* ── GARANTIA ── */
+.guarantee {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    background: var(--accent-bg);
+    border: 1px solid #e3d8c2;
+    border-radius: 12px;
+    padding: 20px;
+}
+
+.guarantee svg {
+    width: 34px;
+    height: 34px;
+    color: var(--accent);
+    flex-shrink: 0;
+}
+
+.guarantee h3 { font-size: 17px; margin-bottom: 5px; }
+
+.guarantee p { font-size: 15px; }
+
+/* ── FAQ ── */
+.faq { display: grid; gap: 10px; }
+
+.faq details {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 9px;
+    overflow: hidden;
+}
+
+.faq summary {
+    padding: 15px 44px 15px 16px;
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+}
+
+.faq summary::-webkit-details-marker { display: none; }
+
+.faq summary::after {
+    content: '';
+    position: absolute;
+    right: 18px;
+    top: 21px;
+    width: 8px;
+    height: 8px;
+    border-right: 2px solid var(--ink-faint);
+    border-bottom: 2px solid var(--ink-faint);
+    transform: rotate(45deg);
+    transition: transform 0.2s;
+}
+
+.faq details[open] summary::after {
+    transform: rotate(-135deg);
+    top: 25px;
+}
+
+.faq p {
+    padding: 0 16px 16px;
+    font-size: 15px;
+}
+
+/* ── AVISO LEGAL ── */
+.disclaimer {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 18px;
+    font-size: 13.5px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+}
+
+.disclaimer strong { color: var(--ink); }
+
+/* ── RODAPÉ ── */
+.site-footer {
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    padding: 26px 0 40px;
+    font-size: 13px;
+    color: var(--ink-faint);
+    text-align: center;
+}
+
+.site-footer nav {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    margin-bottom: 14px;
+}
+
+.site-footer a { color: var(--ink-soft); text-decoration: none; }
+
+.site-footer a:hover { text-decoration: underline; }
+
+/* ── TELAS MAIORES ── */
+@media (min-width: 620px) {
+    .hero h1 { font-size: 36px; }
+    section  { padding: 54px 0; }
+    .cta     { width: auto; display: inline-block; min-width: 320px; }
+    .hero .cta-wrap { text-align: center; }
+}
