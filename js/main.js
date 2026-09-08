@@ -167,7 +167,7 @@ function showNotif() {
             </span>
             <div class="notif-text">
                 <span class="notif-name">${name}</span>
-                <span class="notif-action">acaba de adquirir el manuscrito</span>
+                <span class="notif-action">acaba de adquirir el Manuscrito Antiguo</span>
             </div>
             <span class="notif-time">${getTimeLabel()}</span>
             <button class="notif-close" aria-label="Cerrar">✕</button>
