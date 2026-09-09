@@ -355,23 +355,6 @@ body {
 }
 
 /* ── Facebook Plugin Badge ── */
-.fb-plugin-badge {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 12px 0 0;
-    margin-top: 10px;
-    border-top: 1px solid var(--border);
-    font-size: 12px;
-    color: #65676b;
-}
-
-.fb-logo {
-    width: 20px;
-    height: 20px;
-    flex-shrink: 0;
-}
-
 /* ════════════════════════════════
    FOOTER
 ════════════════════════════════ */
