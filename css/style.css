@@ -42,47 +42,6 @@ body {
 }
 
 /* ════════════════════════════════
-   LIVE BAR
-════════════════════════════════ */
-.live-bar {
-    background: var(--red);
-    color: var(--white);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 7px 14px;
-    font-size: 13px;
-    font-weight: 700;
-    letter-spacing: 0.5px;
-}
-
-.live-badge {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-}
-
-.live-dot {
-    width: 9px;
-    height: 9px;
-    background: var(--white);
-    border-radius: 50%;
-    animation: blink 1.2s ease-in-out infinite;
-}
-
-@keyframes blink {
-    0%, 100% { opacity: 1; }
-    50%       { opacity: 0.25; }
-}
-
-.eye-count {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 13px;
-}
-
-/* ════════════════════════════════
    EXCLUSIVE BANNER
 ════════════════════════════════ */
 .exclusive-banner {
@@ -95,9 +54,31 @@ body {
 }
 
 .exclusive-banner .sub-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
     font-size: 16px;
     font-weight: 700;
     color: var(--white);
+}
+
+.broadcast-icon {
+    display: block;
+    flex-shrink: 0;
+    overflow: visible;
+    transform-origin: center;
+    animation: broadcast-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes broadcast-pulse {
+    0%, 100% { transform: scale(0.85); }
+    50% { transform: scale(1.08); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .broadcast-icon {
+        animation: none;
+    }
 }
 
 /* ════════════════════════════════
