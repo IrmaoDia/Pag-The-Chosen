@@ -66,17 +66,21 @@ body {
     display: block;
     flex-shrink: 0;
     overflow: visible;
-    transform-origin: center;
-    animation: broadcast-pulse 1.5s ease-in-out infinite;
 }
 
-@keyframes broadcast-pulse {
+.broadcast-waves {
+    transform-box: view-box;
+    transform-origin: center;
+    animation: broadcast-waves 1.5s ease-in-out infinite;
+}
+
+@keyframes broadcast-waves {
     0%, 100% { transform: scale(0.85); }
-    50% { transform: scale(1.08); }
+    50% { transform: scale(1); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .broadcast-icon {
+    .broadcast-waves {
         animation: none;
     }
 }
